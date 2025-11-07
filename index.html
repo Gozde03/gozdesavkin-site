@@ -1,0 +1,399 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Hello — I am a Software Engineer</title>
+  <meta name="color-scheme" content="light dark">
+  <style>
+    img.redgoat-logo { border-radius: 9px; }
+    /* ========= Base / Reset ========= */
+    *,*::before,*::after{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font: 400 16px/1.5 -apple-system,BlinkMacSystemFont,"SF Pro Text","Helvetica Neue",Helvetica,Arial,ui-sans-serif,system-ui;
+      color: var(--fg);
+      background: var(--bg);
+      overflow-x:hidden;
+      -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    }
+    :root{
+      /* Default theme: NAVY / WHITE */
+      --bg:#0b132b;           /* deep navy */
+      --fg:#f5f7ff;           /* near-white */
+      --muted:#a8b3cf;        /* desaturated slate */
+      --accent:#2d6cdf;       /* cobalt blue */
+      --card:#0f1a3a;         /* darker navy for cards */
+      --outline:#1e2a4a;      /* navy outline */
+      --shadow:0 10px 30px rgba(0,0,0,.40);
+      --grad1: rgba(45,108,223,.20);   /* accent cobalt */
+      --grad2: rgba(0,179,255,.18);    /* cyan tint */
+      --grad3: rgba(255,45,85,.19);    /* pink tint */
+    }
+    :root[data-theme="navy"]{ /* explicit alias */
+      --bg:#0b132b; --fg:#f5f7ff; --muted:#a8b3cf; --accent:#2d6cdf; --card:#0f1a3a; --outline:#1e2a4a; --shadow:0 10px 30px rgba(0,0,0,.40);
+    }
+    :root[data-theme="plum"]{
+      --bg:#f7efe5;           /* light beige background (light mode) */
+      --fg:#1f1630;           /* dark text */
+      --muted:#6f5d7a;        /* muted plum for secondary text */
+      --accent:#7e3ace;       /* PURPLE accent */
+      --accent2:#b5835a;      /* LIGHT BROWN secondary */
+      --card:#fffaf4;         /* light card */
+      --outline:#e9dccf;      /* soft outline */
+      --shadow:0 10px 30px rgba(0,0,0,.08);
+      --grad1: rgba(126,58,206,.28);   /* purple glow */
+      --grad2: rgba(181,131,90,.24);   /* light brown glow */
+      --grad3: rgba(201,177,230,.22);  /* soft lilac */
+    }
+
+    /* ========= Sticky Nav (minimal, Apple-like) ========= */
+    .nav{
+      position:sticky; top:0; z-index:1000;
+      backdrop-filter:saturate(180%) blur(20px);
+      background: color-mix(in oklab, var(--bg) 70%, transparent);
+      border-bottom:1px solid color-mix(in oklab, var(--outline) 80%, transparent);
+    }
+    .nav-inner{
+      max-width:1200px; margin:0 auto; display:flex; align-items:center; gap:24px;
+      padding:12px 20px;
+    }
+    .brand{font-weight:600; letter-spacing:.2px}
+    .spacer{flex:1}
+    .nav a{
+      color: var(--fg); text-decoration:none; opacity:.9;
+      padding:.25rem .5rem; border-radius:8px;
+    }
+    .nav a:hover{background: color-mix(in srgb, var(--fg) 10%, transparent)}
+    .nav.shadow{box-shadow: var(--shadow)}
+
+    /* ========= Hero ========= */
+    .hero{
+      position:relative; min-height:100svh; display:grid; place-items:center; overflow:hidden;
+      isolation:isolate;
+      contain: layout paint;
+    }
+    .gradient{
+      position:absolute; inset:-20% -10% -20% -10%; z-index:-1;
+      background:
+        radial-gradient(60% 60% at 70% 30%, var(--grad1) 0%, transparent 60%),
+        radial-gradient(50% 50% at 20% 70%, var(--grad2) 0%, transparent 60%),
+        radial-gradient(30% 30% at 80% 80%, var(--grad3) 0%, transparent 70%);
+      transform:translateZ(0);
+      will-change: transform, opacity;
+    }
+    .hero h1{
+      margin:0 0 8px 0;
+      font-size: clamp(40px, 8vw, 96px);
+      line-height: .95;
+      letter-spacing:-.02em;
+      text-align:center;
+    }
+    .hero .sub{
+      margin-top:18px; text-align:center; color:var(--muted); font-size:clamp(16px,2.2vw,20px)
+    }
+    .word-rotator{
+      display:inline-grid; min-width: 6.5ch; white-space:nowrap;
+    }
+    .word-rotator .word{grid-area:1/1; opacity:0; transform:translateY(20%); transition:opacity .7s ease, transform .7s ease; will-change:opacity, transform}
+    .word-rotator .word.active{opacity:1; transform:translateY(0)}
+
+    .cta-row{margin-top:28px; display:flex; gap:14px; justify-content:center; flex-wrap:wrap}
+    .btn{
+      border:1px solid var(--outline); background:transparent; color:var(--fg);
+      padding:.8rem 1.1rem; border-radius:999px; cursor:pointer; font-weight:600;
+      transition: transform .2s ease, background .2s ease, border-color .2s ease;
+    }
+    .btn:hover{transform:translateY(-1px); background: color-mix(in oklab, var(--fg) 8%, transparent)}
+    .btn.primary{border-color: color-mix(in oklab, var(--accent) 40%, var(--outline)); background: color-mix(in oklab, var(--accent) 15%, transparent)}
+
+    html[data-theme="plum"] .btn{border-color: color-mix(in oklab, var(--accent2) 35%, var(--outline))}
+    html[data-theme="plum"] .btn:hover{background: color-mix(in oklab, var(--accent2) 12%, transparent)}
+    html[data-theme="plum"] .card:hover{border-color: color-mix(in oklab, var(--accent) 40%, var(--outline))}
+    html[data-theme="plum"] .card .badge{border-color: color-mix(in oklab, var(--accent2) 50%, var(--outline)); background: color-mix(in oklab, var(--accent2) 12%, transparent)}
+
+    .swatches{display:flex; gap:8px; align-items:center}
+    .swatch{border:1px solid var(--outline); background:transparent; color:var(--fg); border-radius:999px; padding:.35rem .7rem; font-size:.85rem; cursor:pointer}
+    .swatch:hover{background: color-mix(in oklab, var(--fg) 10%, transparent)}
+
+    .cta-card{display:inline-flex; align-items:center; gap:12px; padding:16px 20px; border:1px solid var(--outline); border-radius:16px; background: color-mix(in oklab, var(--fg) 6%, transparent); text-decoration:none; color:var(--fg); box-shadow: var(--shadow); transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease}
+    .cta-card:hover{transform: translateY(-2px); box-shadow: 0 16px 32px rgba(0,0,0,.18); border-color: color-mix(in oklab, var(--accent) 35%, var(--outline))}
+    .cta-icon{width:22px; height:22px; display:inline-block}
+    .scroll-cue{
+      position:absolute; bottom:32px; left:50%; translate:-50% 0;
+      color:var(--muted); font-size:14px; opacity:.9; display:flex; align-items:center; gap:8px;
+    }
+    .cue-dot{width:6px; height:6px; border-radius:50%; background:var(--muted); animation: float 1.8s ease-in-out infinite}
+    @keyframes float{50%{transform:translateY(6px); opacity:.6}}
+
+    /* ========= Sections (Apple-like rhythm) ========= */
+    section{padding: clamp(56px, 10vw, 120px) 20px; border-bottom:1px solid color-mix(in oklab, var(--outline) 70%, transparent)}
+    .wrap{max-width:1200px; margin:0 auto}
+
+    .headline{
+      font-size: clamp(28px,5vw,56px); line-height:1.05; letter-spacing:-.01em;
+      margin:0 0 16px 0;
+    }
+    .lede{color:var(--muted); max-width: 70ch; font-size: clamp(16px,2.2vw,20px)}
+
+    /* Sticky media block (like product stories) */
+    .story{
+      display:grid; grid-template-columns:1fr; gap:28px; align-items:start;
+    }
+    .story .sticky{
+      position:sticky; top:clamp(64px, 10vh, 88px); align-self:start; border-radius:24px; overflow:hidden;
+      background:var(--card); border:1px solid var(--outline); box-shadow: var(--shadow);
+      aspect-ratio: 16/10; display:grid; place-items:center;
+    }
+    .sticker{font-size: clamp(28px,6vw,72px); font-weight:700; letter-spacing:-.02em; opacity:.95}
+    .story ul{margin:0; padding-left:1.1rem; color:var(--muted); font-size:18px}
+    .story li{margin:.6rem 0}
+    @media (max-width: 960px){
+      .story .sticky{top:72px}
+    }
+
+    /* Feature grid (cards with hover like apple tiles) */
+    .grid{
+      display:grid; grid-template-columns: repeat(12, 1fr); gap:16px;
+      margin-top:32px;
+    }
+    .card{
+      grid-column: span 6;
+      background:var(--card); border:1px solid var(--outline); border-radius:28px; padding:28px;
+      box-shadow: var(--shadow); transition: transform .3s ease, box-shadow .3s ease, border-color .2s ease;
+      will-change: transform;
+    }
+    .card:hover{transform: translateY(-4px); box-shadow: 0 18px 40px rgba(0,0,0,.18); border-color: color-mix(in oklab, var(--accent) 30%, var(--outline))}
+    .card h3{margin:0 0 10px 0; font-size:clamp(20px,2.4vw,28px)}
+    .card p{margin:0; color:var(--muted)}
+    .card .badge{display:inline-block; padding:.25rem .6rem; border:1px solid var(--outline); border-radius:999px; font-size:.8rem; margin-bottom:10px; opacity:.9}
+    .card .big{font-size:clamp(32px,4.8vw,48px); line-height:1.05; margin-top:8px}
+    .span-12{grid-column: 1 / -1}
+    @media (max-width: 900px){
+      .card{grid-column: span 12}
+    }
+
+    /* Reveal-on-scroll */
+    .reveal{opacity:0; transform: translateY(24px); transition: opacity .8s ease, transform .8s ease}
+    .reveal.visible{opacity:1; transform:none}
+
+    /* Footer */
+    footer{padding:40px 20px; color:var(--muted)}
+    .footwrap{max-width:1200px; margin:0 auto; display:flex; flex-wrap:wrap; align-items:center; gap:12px; justify-content:space-between; border-top:1px solid color-mix(in oklab, var(--outline) 70%, transparent); padding-top:20px}
+    .small{font-size:14px}
+    .link{color:var(--accent); text-decoration:none}
+
+    /* Reduced motion */
+    @media (prefers-reduced-motion: reduce){
+      .gradient{transition:none}
+      .reveal{transition:none}
+      .card,.btn{transition:none}
+    }
+  </style>
+</head>
+<body>
+  <!-- ======== NAV ======== -->
+  <nav class="nav" aria-label="Primary">
+    <div class="nav-inner">
+      <div class="brand" style="display:flex;align-items:center;gap:8px">
+        <img class="redgoat-logo" src="redgoat-logo.png" alt="redGoat.dev logo" style="height:28px;width:auto;display:inline-block"/>
+
+      </div>
+      <div class="swatches" role="group" aria-label="Theme">
+        <button class="swatch" data-set-theme="navy">Dark</button>
+        <button class="swatch" data-set-theme="plum">Light</button>
+      </div>
+      <div class="spacer"></div>
+      <a href="#work">Work</a>
+      <a href="#about">About</a>
+      <a href="#contact" class="btn">Contact</a>
+    </div>
+  </nav>
+
+  <!-- ======== HERO ======== -->
+  <header class="hero" id="home" aria-label="Intro">
+    <div class="gradient" id="gradient"></div>
+    <div class="wrap">
+      <h1>
+        Hello — I am a<br/>
+        <span class="word-rotator" aria-live="polite">
+          <span class="word active">Software Engineer</span>
+          <span class="word">React Developer</span>
+          <span class="word">Python Developer</span>
+          <span class="word">Full‑Stack Developer</span>
+        </span>
+      </h1>
+      <p class="sub">Motivated and detail‑oriented Software Engineering student with hands‑on experience in database migration, web development, and backend automation.</p>
+      <div class="cta-row">
+        <a href="#work" class="btn primary">See my work</a>
+        <a href="#about" class="btn">How I build</a>
+      </div>
+    </div>
+    <div class="scroll-cue" aria-hidden="true">
+      <span class="cue-dot"></span> Scroll
+    </div>
+  </header>
+
+  <!-- ======== FEATURE GRID ======== -->
+  <section id="work">
+    <div class="wrap">
+      <h2 class="headline reveal">What I do</h2>
+      <div class="grid">
+        <article class="card reveal span-12">
+          <span class="badge">Experience</span>
+          <h3>TALPA — Software Engineer Intern (Jul 2025 — Sep 2025, İstanbul)</h3>
+          <ul style="margin:0; padding-left:1.1rem; color:var(--muted); font-size:18px">
+            <li>Migrated legacy database to a modern platform; cleaned and restructured data.</li>
+            <li>Standardized data types to ensure consistency across the new system.</li>
+            <li>Contributed to a new company website with OTP-based payment verification (Iyzico).</li>
+            <li>Worked on both frontend and backend to extend legacy features.</li>
+            <li>Built a Python-based automated email sender to streamline communication.</li>
+          </ul>
+        </article>
+
+        <article class="card reveal">
+          <span class="badge">Education</span>
+          <h3>İstanbul Beykent University (Oct 2022 — Jun 2026)</h3>
+          <p>Senior year passed — Software Engineering.</p>
+        </article>
+
+        <article class="card reveal">
+          <span class="badge">Skills</span>
+          <h3>Core Stack</h3>
+          <p>C++, C#, JavaScript, HTML/CSS, Python, Java, React, Microsoft Tools.</p>
+        </article>
+
+        <article class="card reveal">
+          <span class="badge">Languages</span>
+          <h3>English</h3>
+          <p>C2</p>
+        </article>
+
+        <article class="card reveal">
+          <span class="badge">Voluntary Work</span>
+          <h3>R&D and Innovation Club</h3>
+          <p>Fall 2024 — Sponsorship Representative, İstanbul Beykent University.</p>
+        </article>
+
+        <article class="card reveal">
+          <span class="badge">Hobbies</span>
+          <h3>What I enjoy</h3>
+          <p>Programming, flying a drone, playing instruments, learning foreign languages, table tennis, karting.</p>
+        </article>
+
+        <article class="card span-12 reveal">
+          <div class="big">İstanbul, Türkiye — building efficient, scalable, user‑focused solutions.</div>
+          <p style="margin-top:10px">Open to impactful roles where clean architecture and product quality matter.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== ABOUT ======== -->
+  <section id="about">
+    <div class="wrap">
+      <h2 class="headline reveal">How I build</h2>
+      <p class="lede reveal">
+        Discovery → Wireframe → Prototype → Implement → Test → Iterate. Opinions are strong, feedback loops are short, and accessibility isn’t optional.
+      </p>
+    </div>
+  </section>
+
+  <!-- ======== CONTACT ======== -->
+  <section id="contact" aria-label="Contact">
+    <div class="wrap">
+      <h2 class="headline reveal">Let’s build something people love.</h2>
+      <p class="lede reveal">
+        Find me on <a class="link" href="https://github.com/Gozde03" target="_blank" rel="noopener">GitHub</a> and <a class="link" href="https://www.linkedin.com/in/gözde-şavkın-12a72729b" target="_blank" rel="noopener">LinkedIn</a>.
+      </p>
+      <div class="cta-row reveal">
+        <a href="#home" class="btn">Back to top</a>
+        <a href="#work" class="btn primary">View work</a>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footwrap">
+      <div class="small">© <span id="year"></span> Genie.Dev</div>
+      <div class="small">Made with semantic HTML, modern CSS, and a sprinkle of JS — data sourced from my public CV.</div>
+    </div>
+  </footer>
+
+  <script>
+    // ===== Theme bootstrapping
+    (function(){
+      const saved = localStorage.getItem('theme');
+      if(saved){ document.documentElement.setAttribute('data-theme', saved); }
+    })();
+
+    // ===== Sticky nav shadow
+    const nav = document.querySelector('.nav');
+    const navShadow = () => nav.classList.toggle('shadow', window.scrollY > 6);
+    navShadow(); addEventListener('scroll', navShadow, {passive:true});
+
+    // ===== Word rotator (Apple-like headline dynamism)
+    const words = [...document.querySelectorAll('.word-rotator .word')];
+    let idx = 0;
+    setInterval(()=> {
+      words[idx].classList.remove('active');
+      idx = (idx + 1) % words.length;
+      words[idx].classList.add('active');
+    }, 2200);
+
+    // ===== Reveal on scroll
+    const revealEls = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver((entries)=>{
+      entries.forEach(e=>{
+        if(e.isIntersecting){
+          e.target.classList.add('visible');
+          io.unobserve(e.target);
+        }
+      });
+    }, {threshold:.12});
+    revealEls.forEach(el=>io.observe(el));
+
+    // ===== Subtle parallax gradient
+    const grad = document.getElementById('gradient');
+    let lastScrollY = 0; let pointerAngle = 0;
+    function onScroll(){
+      const y = window.scrollY || 0;
+      lastScrollY = y;
+      grad.style.transform = `translate3d(0, ${-y*0.06}px, 0) scale(1.05) rotate(${pointerAngle}deg)`;
+      grad.style.opacity = String(1 - Math.min(y/1200, .35));
+    }
+    addEventListener('scroll', onScroll, {passive:true});
+    onScroll();
+
+    // Mouse parallax (no transform accumulation)
+    addEventListener('pointermove', (e)=>{
+      const {innerWidth:w, innerHeight:h} = window;
+      const rx = (e.clientX / w - .5) * 6; // degrees
+      pointerAngle = rx;
+      grad.style.transform = `translate3d(0, ${-lastScrollY*0.06}px, 0) scale(1.05) rotate(${pointerAngle}deg)`;
+    }, {passive:true});
+
+    // ===== Year
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // ===== Theme switcher
+    document.querySelectorAll('[data-set-theme]').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        const theme = btn.getAttribute('data-set-theme');
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('theme', theme);
+      });
+    });
+
+    // ===== Respect reduced motion
+    const media = matchMedia('(prefers-reduced-motion: reduce)');
+    if (media.matches){
+      removeEventListener('scroll', onScroll);
+      grad.style.transform = 'none';
+      pointerAngle = 0;
+      grad.style.opacity = '1';
+    }
+  </script>
+</body>
+</html>
