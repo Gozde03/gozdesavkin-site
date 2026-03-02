@@ -101,12 +101,21 @@
 
     .cta-row{margin-top:28px; display:flex; gap:14px; justify-content:center; flex-wrap:wrap}
     .btn{
-      border:1px solid var(--outline); background:transparent; color:var(--fg);
-      padding:.8rem 1.1rem; border-radius:999px; cursor:pointer; font-weight:600;
+      border:1px solid var(--outline);
+      background:transparent;
+      color: var(--fg);
+      text-decoration:none;
+      padding:.8rem 1.1rem;
+      border-radius:999px;
+      cursor:pointer;
+      font-weight:600;
       transition: transform .2s ease, background .2s ease, border-color .2s ease;
     }
-    .btn:hover{transform:translateY(-1px); background: color-mix(in oklab, var(--fg) 8%, transparent)}
-    .btn.primary{border-color: color-mix(in oklab, var(--accent) 40%, var(--outline)); background: color-mix(in oklab, var(--accent) 15%, transparent)}
+    .btn:hover{transform:translateY(-1px); background: color-mix(in oklab, var(--fg) 8%, transparent); text-decoration:none}
+    .btn.primary{
+      border-color: color-mix(in oklab, var(--accent) 40%, var(--outline));
+      background: color-mix(in oklab, var(--accent) 15%, transparent);
+    }
 
     html[data-theme="plum"] .btn{border-color: color-mix(in oklab, var(--accent2) 35%, var(--outline))}
     html[data-theme="plum"] .btn:hover{background: color-mix(in oklab, var(--accent2) 12%, transparent)}
@@ -116,6 +125,22 @@
     .swatches{display:flex; gap:8px; align-items:center}
     .swatch{border:1px solid var(--outline); background:transparent; color:var(--fg); border-radius:999px; padding:.35rem .7rem; font-size:.85rem; cursor:pointer}
     .swatch:hover{background: color-mix(in oklab, var(--fg) 10%, transparent)}
+
+    /* Swatch selected state (Theme / Language) */
+    .swatch[aria-pressed="true"]{
+      background: color-mix(in oklab, var(--fg) 12%, transparent);
+      border-color: color-mix(in oklab, var(--fg) 22%, var(--outline));
+      opacity: 1;
+    }
+    .swatch[aria-pressed="true"]:hover{
+      background: color-mix(in oklab, var(--fg) 14%, transparent);
+    }
+
+    /* In light theme, keep selected state subtle */
+    html[data-theme="plum"] .swatch[aria-pressed="true"]{
+      background: color-mix(in oklab, var(--fg) 10%, transparent);
+      border-color: color-mix(in oklab, var(--fg) 18%, var(--outline));
+    }
 
     .cta-card{display:inline-flex; align-items:center; gap:12px; padding:16px 20px; border:1px solid var(--outline); border-radius:16px; background: color-mix(in oklab, var(--fg) 6%, transparent); text-decoration:none; color:var(--fg); box-shadow: var(--shadow); transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease}
     .cta-card:hover{transform: translateY(-2px); box-shadow: 0 16px 32px rgba(0,0,0,.18); border-color: color-mix(in oklab, var(--accent) 35%, var(--outline))}
@@ -198,17 +223,20 @@
     <div class="nav-inner">
       <div class="brand" style="display:flex;align-items:center;gap:8px">
         <img class="redgoat-logo" src="redgoat-logo.png" alt="redGoat.dev logo" style="height:28px;width:auto;display:inline-block"/>
-
       </div>
       <div class="swatches" role="group" aria-label="Theme">
-        <button class="swatch" data-set-theme="navy">Dark</button>
-        <button class="swatch" data-set-theme="plum">Light</button>
+        <button class="swatch" data-set-theme="navy" data-i18n="ui.theme.dark">Dark</button>
+        <button class="swatch" data-set-theme="plum" data-i18n="ui.theme.light">Light</button>
+      </div>
+
+      <div class="swatches" role="group" aria-label="Language">
+        <button id="lang-toggle" class="swatch" aria-label="Change language" title="Change language">🇹🇷</button>
       </div>
       <div class="spacer"></div>
-      <a href="#work">Work</a>
-      <a href="#about">About</a>
-      <a href="#contact" class="btn">Contact</a>
-    </div>
+      <a href="#projects" data-i18n="nav.projects">Projects</a>
+      <a href="#experience" data-i18n="nav.experience">Experience</a>
+      <a href="#about" data-i18n="nav.about">About</a>
+      <a href="#contact" data-i18n="nav.contact">Contact</a>    </div>
   </nav>
 
   <!-- ======== HERO ======== -->
@@ -216,18 +244,18 @@
     <div class="gradient" id="gradient"></div>
     <div class="wrap">
       <h1>
-        Hello — I am a<br/>
+        <span data-i18n="hero.hello">Hello — I am a</span><br/>
         <span class="word-rotator" aria-live="polite">
-          <span class="word active">Software Engineer</span>
-          <span class="word">React Developer</span>
-          <span class="word">Python Developer</span>
-          <span class="word">Full‑Stack Developer</span>
+          <span class="word active">Vibe Coder</span>
+          <span class="word">Backend Developer</span>
+          <span class="word">Mobile Developer</span>
+          <span class="word">Software Engineer</span>
         </span>
       </h1>
-      <p class="sub">Motivated and detail‑oriented Software Engineering student with hands‑on experience in database migration, web development, and backend automation.</p>
+      <p class="sub" data-i18n="hero.sub">I turn ideas into clean, fast, and dependable software — from backend flows to polished user experiences.</p>
       <div class="cta-row">
-        <a href="#work" class="btn primary">See my work</a>
-        <a href="#about" class="btn">How I build</a>
+        <a href="https://github.com/Gozde03" target="_blank" rel="noopener" class="btn primary">GitHub</a>
+<a href="https://www.linkedin.com/in/g%C3%B6zde-%C5%9Favk%C4%B1n-12a72729b" target="_blank" rel="noopener" class="btn primary">LinkedIn</a>
       </div>
     </div>
     <div class="scroll-cue" aria-hidden="true">
@@ -235,56 +263,92 @@
     </div>
   </header>
 
-  <!-- ======== FEATURE GRID ======== -->
-  <section id="work">
+  <!-- ======== WHAT I DO (from CV) ======== -->
+  <section id="whatido">
     <div class="wrap">
-      <h2 class="headline reveal">What I do</h2>
+      <h2 class="headline reveal" data-i18n="section.whatido">What I do</h2>
+
+      <div class="grid">
+
+        <article class="card reveal span-12">
+          <span class="badge" data-i18n="badge.education">Education</span>
+          <h3 data-i18n="education.content">Istanbul Beykent University (Oct 2022 — Jun 2026)</h3>
+          <p></p>
+        </article>
+
+        <article class="card reveal span-12">
+          <span class="badge" data-i18n="badge.skills">Skills</span>
+            <ul id="skills-list" style="margin:0; padding-left:1.1rem; color:var(--muted); font-size:18px">
+              <li data-i18n="skill1">Programlama Dilleri: Java, Python, C++, C#, JavaScript, SQL, Swift</li>
+              <li data-i18n="skill2">Framework & Web Teknolojileri: Spring Boot, React.js, SwiftUI, HTML, CSS</li>
+              <li data-i18n="skill3">Veri Tabanı & Test: MySQL, JUnit, Mockito</li>
+            </ul>
+        </article>
+
+        <article class="card reveal span-12">
+          <span class="badge" data-i18n="badge.languages">Languages</span>
+          <h3 data-i18n="languages.content">English — C2</h3>
+        </article>
+
+        <article class="card reveal span-12">
+          <span class="badge" data-i18n="badge.voluntary">Voluntary Work</span>
+          <h3 data-i18n="voluntary.content">Istanbul Beykent University R&amp;D and Innovation Club</h3>
+          <p></p>
+        </article>
+
+        <article class="card reveal span-12">
+          <span class="badge" data-i18n="badge.hobbies">Hobbies</span>
+            <p data-i18n="hobbies.content">Drone kullanmak, enstrüman çalmak, yabancı dil öğrenmek</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ======== PROJECTS ======== -->
+  <section id="projects">
+    <div class="wrap">
+      <h2 class="headline reveal" data-i18n="section.projects">Projects</h2>
+      <div class="grid">
+        <article class="card reveal">
+          <span class="badge">Project</span>
+          <h3 data-i18n="project1.title">Online Ticket Purchasing System</h3>
+          <p data-i18n="project1.desc">Developed a Spring Boot-based web application with layered architecture and unit testing (JUnit/Mockito).</p>
+          <div class="small" data-i18n="project1.tech" style="margin-top:10px;">Technologies: Java, Spring Boot, MySQL, JUnit, Mockito</div>
+        </article>
+
+        <article class="card reveal">
+          <span class="badge">Project</span>
+          <h3 data-i18n="project2.title">AI Config Orchestrator</h3>
+          <p data-i18n="project2.desc">Worked on configuration validation and automation logic within a lightweight orchestration system.</p>
+          <div class="small" data-i18n="project2.tech" style="margin-top:10px;">Technologies: Python, JSON</div>
+        </article>
+
+        <article class="card reveal">
+          <span class="badge">Project</span>
+          <h3 data-i18n="project3.title">FocusOn — iOS App</h3>
+          <p data-i18n="project3.desc">Developed a productivity-focused iOS application using Swift.</p>
+          <div class="small" data-i18n="project3.tech" style="margin-top:10px;">Technologies: Swift, SwiftUI</div>
+        </article>
+      </div>
+
+      <p class="lede reveal" style="margin-top:18px;"><span data-i18n="projects.more">You can find more on</span> <a class="link" href="https://github.com/Gozde03" target="_blank" rel="noopener">GitHub</a></p>
+    </div>
+  </section>
+
+  <!-- ======== EXPERIENCE ======== -->
+  <section id="experience">
+    <div class="wrap">
+      <h2 class="headline reveal" data-i18n="section.experience">Experience</h2>
       <div class="grid">
         <article class="card reveal span-12">
-          <span class="badge">Experience</span>
-          <h3>TALPA — Software Engineer Intern (Jul 2025 — Sep 2025, İstanbul)</h3>
+          <span class="badge" data-i18n="badge.employment">Employment History</span>
+          <h3 data-i18n="employment.content">Software Engineer Intern, TALPA</h3>
+          <div class="small" data-i18n="employment.content" style="margin-bottom:8px;">Jul 2025 — Sep 2025 · İstanbul</div>
           <ul style="margin:0; padding-left:1.1rem; color:var(--muted); font-size:18px">
-            <li>Migrated legacy database to a modern platform; cleaned and restructured data.</li>
-            <li>Standardized data types to ensure consistency across the new system.</li>
-            <li>Contributed to a new company website with OTP-based payment verification (Iyzico).</li>
-            <li>Worked on both frontend and backend to extend legacy features.</li>
-            <li>Built a Python-based automated email sender to streamline communication.</li>
+            <li data-i18n="employment.detail1">Designed and developed a new corporate website, implementing a secure, OTP-based payment verification system via Iyzico integration.</li>
+            <li data-i18n="employment.detail2">Enhanced the functionality and performance of an existing web application through full-stack (frontend and backend) development contributions.</li>
+            <li data-i18n="employment.detail3">Streamlined corporate communication workflows by engineering a Python-based email automation application.</li>
           </ul>
-        </article>
-
-        <article class="card reveal">
-          <span class="badge">Education</span>
-          <h3>İstanbul Beykent University (Oct 2022 — Jun 2026)</h3>
-          <p>Senior year passed — Software Engineering.</p>
-        </article>
-
-        <article class="card reveal">
-          <span class="badge">Skills</span>
-          <h3>Core Stack</h3>
-          <p>C++, C#, JavaScript, HTML/CSS, Python, Java, React, Microsoft Tools.</p>
-        </article>
-
-        <article class="card reveal">
-          <span class="badge">Languages</span>
-          <h3>English</h3>
-          <p>C2</p>
-        </article>
-
-        <article class="card reveal">
-          <span class="badge">Voluntary Work</span>
-          <h3>R&D and Innovation Club</h3>
-          <p>Fall 2024 — Sponsorship Representative, İstanbul Beykent University.</p>
-        </article>
-
-        <article class="card reveal">
-          <span class="badge">Hobbies</span>
-          <h3>What I enjoy</h3>
-          <p>Programming, flying a drone, playing instruments, learning foreign languages, table tennis, karting.</p>
-        </article>
-
-        <article class="card span-12 reveal">
-          <div class="big">İstanbul, Türkiye — building efficient, scalable, user‑focused solutions.</div>
-          <p style="margin-top:10px">Open to impactful roles where clean architecture and product quality matter.</p>
         </article>
       </div>
     </div>
@@ -293,9 +357,9 @@
   <!-- ======== ABOUT ======== -->
   <section id="about">
     <div class="wrap">
-      <h2 class="headline reveal">How I build</h2>
-      <p class="lede reveal">
-        Discovery → Wireframe → Prototype → Implement → Test → Iterate. Opinions are strong, feedback loops are short, and accessibility isn’t optional.
+      <h2 class="headline reveal" data-i18n="section.about">About Me</h2>
+      <p class="lede reveal" data-i18n="about.p1">
+        Backend, web ve mobil uygulama mimarisi alanlarında deneyime sahip, detay odaklı bir Yazılım Mühendisliği öğrencisiyim. Legacy sistem migrasyonu ve OTP tabanlı güvenli ödeme entegrasyonları süreçlerinde aktif rol aldım. Spring Boot ile online bilet satın alma uygulaması geliştirerek test süreçlerinde JUnit/Mockito kullandım. Swift ile geliştirdiğim iOS uygulaması sayesinde mobil uygulama geliştirme alanında da deneyim kazandım. Geliştirme süreçlerinde kod kalitesini artırmaya ve sürdürülebilir, kullanıcı odaklı sistemler geliştirmeye odaklanıyorum.
       </p>
     </div>
   </section>
@@ -303,13 +367,12 @@
   <!-- ======== CONTACT ======== -->
   <section id="contact" aria-label="Contact">
     <div class="wrap">
-      <h2 class="headline reveal">Let’s build something people love.</h2>
+      <h2 class="headline reveal" data-i18n="section.contact">Let’s build something people love.</h2>
       <p class="lede reveal">
-        Find me on <a class="link" href="https://github.com/Gozde03" target="_blank" rel="noopener">GitHub</a> and <a class="link" href="https://www.linkedin.com/in/gözde-şavkın-12a72729b" target="_blank" rel="noopener">LinkedIn</a>.
+        <span data-i18n="contact.best">Best way to reach me:</span> <a class="link" href="mailto:info@gozdesavkin.com">info@gozdesavkin.com</a>. <span data-i18n="contact.also">Bana ayrıca</span> <a class="link" href="https://github.com/Gozde03" target="_blank" rel="noopener">GitHub</a> ve <a class="link" href="https://www.linkedin.com/in/g%C3%B6zde-%C5%9Favk%C4%B1n-12a72729b" target="_blank" rel="noopener">LinkedIn</a> üzerinden ulaşabilirsin.
       </p>
       <div class="cta-row reveal">
-        <a href="#home" class="btn">Back to top</a>
-        <a href="#work" class="btn primary">View work</a>
+<a href="#home" class="btn primary">Back to top</a>
       </div>
     </div>
   </section>
@@ -317,16 +380,153 @@
   <footer>
     <div class="footwrap">
       <div class="small">© <span id="year"></span> Genie.Dev</div>
-      <div class="small">Made with semantic HTML, modern CSS, and a sprinkle of JS — data sourced from my public CV.</div>
+      <div class="small" data-i18n="footer.made">Made with semantic HTML, modern CSS, and a sprinkle of JS — data sourced from my public CV.</div>
     </div>
   </footer>
 
   <script>
-    // ===== Theme bootstrapping
+    // ===== Theme + Language bootstrapping
     (function(){
-      const saved = localStorage.getItem('theme');
-      if(saved){ document.documentElement.setAttribute('data-theme', saved); }
+      const savedTheme = localStorage.getItem('theme') || 'navy';
+      document.documentElement.setAttribute('data-theme', savedTheme);
+
+      const savedLang = localStorage.getItem('lang') || 'en';
+      document.documentElement.setAttribute('data-lang', savedLang);
     })();
+    function applyTheme(theme){
+      document.documentElement.setAttribute('data-theme', theme);
+      document.querySelectorAll('[data-set-theme]').forEach(btn => {
+        btn.setAttribute('aria-pressed', btn.getAttribute('data-set-theme') === theme ? 'true' : 'false');
+      });
+      localStorage.setItem('theme', theme);
+    }
+
+    const I18N = {
+      en: {
+        'ui.theme.dark': 'Dark',
+        'ui.theme.light': 'Light',
+        'nav.projects': 'Projects',
+        'nav.experience': 'Experience',
+        'nav.about': 'About',
+        'nav.contact': 'Contact',
+        'hero.hello': 'Hello — I am a',
+        'hero.sub': 'I turn ideas into clean, fast, and dependable software — from backend flows to polished user experiences.',
+        'section.whatido': 'What I do',
+        'section.projects': 'Projects',
+        'section.experience': 'Experience',
+        'section.about': 'About Me',
+        'section.contact': 'Let’s build something people love.',
+        'badge.education': 'Education',
+        'badge.skills': 'Skills',
+        'whatido.techskills': 'Technical Skills',
+        'badge.languages': 'Languages',
+        'badge.voluntary': 'Voluntary Work',
+        'badge.hobbies': 'Hobbies',
+        'whatido.enjoy': 'What I enjoy',
+        'projects.more': 'You can find more on',
+        'badge.employment': 'Employment History',
+        'about.p1': 'Detail-oriented Software Engineering student with experience in backend, web, and mobile application architecture. Actively contributed to legacy system migration and OTP-based secure payment integration processes.',
+        'about.p2': 'Developed an online ticket purchasing application using Spring Boot and utilized JUnit/Mockito for testing. Built an iOS application using Swift, gaining hands-on experience in mobile application development. Focused on improving code quality and building sustainable, user-centered systems.',
+        'contact.best': 'Best way to reach me:',
+        'contact.also': 'You can also find me on',
+        'contact.and': 'and',
+        'footer.made': 'Made with semantic HTML, modern CSS, and a sprinkle of JS — data sourced from my public CV.',
+      },
+      tr: {
+        'ui.theme.dark': 'Koyu',
+        'ui.theme.light': 'Açık',
+        'nav.projects': 'Projeler',
+        'nav.experience': 'Deneyim',
+        'nav.about': 'Hakkımda',
+        'nav.contact': 'İletişim',
+        'hero.hello': 'Merhaba — ben bir',
+        'hero.sub': 'Fikirleri temiz, hızlı ve güvenilir yazılıma dönüştürüyorum — backend’den kullanıcı deneyimine.',
+        'section.whatido': 'Neler yapıyorum',
+        'section.projects': 'Projeler',
+        'section.experience': 'Deneyim',
+        'section.about': 'Hakkımda',
+        'section.contact': 'İnsanların seveceği şeyler üretelim.',
+        'badge.education': 'Eğitim',
+        'badge.skills': 'Yetenekler',
+        'whatido.techskills': 'Yetenekler',
+        'badge.languages': 'Diller',
+        'badge.voluntary': 'Gönüllü Çalışmalar',
+        'badge.hobbies': 'Hobiler',
+        'whatido.enjoy': 'Sevdiklerim',
+        'projects.more': 'Daha fazlası için',
+        'badge.employment': 'İş Deneyimi',
+        'about.p1': 'Backend, web ve mobil uygulama mimarisi alanlarında deneyime sahip, detay odaklı bir Yazılım Mühendisliği öğrencisiyim. Legacy sistem migrasyonu ve OTP tabanlı güvenli ödeme entegrasyonları süreçlerinde aktif rol aldım. Spring Boot ile online bilet satın alma uygulaması geliştirerek test süreçlerinde JUnit/Mockito kullandım. Swift ile geliştirdiğim iOS uygulaması sayesinde mobil uygulama geliştirme alanında da deneyim kazandım. Geliştirme süreçlerinde kod kalitesini artırmaya ve sürdürülebilir, kullanıcı odaklı sistemler geliştirmeye odaklanıyorum.',
+        'about.p2': '',
+        'contact.best': 'Bana ulaşmanın en iyi yolu:',
+        'contact.also': 'Bana ayrıca',
+        'contact.and': 've LinkedIn üzerinden ulaşabilirsin.',
+        'footer.made': 'Semantik HTML, modern CSS ve azıcık JS ile yapıldı — veriler CV’imden alındı.',
+        // Eğitim
+        'education.content': 'Eki 2022 — Haz 2026 | İstanbul Beykent Üniversitesi, İstanbul',
+        // Yetenekler
+        'skill1': 'Programlama Dilleri: Java, Python, C++, C#, JavaScript, SQL, Swift',
+        'skill2': 'Framework & Web Teknolojileri: Spring Boot, React.js, SwiftUI, HTML, CSS',
+        'skill3': 'Veri Tabanı & Test: MySQL, JUnit, Mockito',
+        // Projeler
+        'project1.title': 'Online Bilet Satın Alma Sistemi',
+        'project1.desc': 'Spring Boot ile katmanlı mimariye sahip web tabanlı bir bilet satın alma uygulaması geliştirdim. JUnit ve Mockito kullanarak birim testleri uyguladım.',
+        'project1.tech': 'Teknolojiler: Java, Spring Boot, MySQL, JUnit, Mockito',
+        'project2.title': 'AI Config Orchestrator',
+        'project2.desc': 'Yazılım yapılandırma doğrulama (configuration validation) ve otomasyon süreçlerine odaklanan hafif ölçekli bir sistem mimarisi tasarladım ve geliştirdim.',
+        'project2.tech': 'Teknolojiler: Python, JSON',
+        'project3.title': 'FocusOn – iOS Uygulaması',
+        'project3.desc': 'Swift ve SwiftUI kullanarak görev planlama, odak süresi takibi ve kullanıcı bazlı ilerleme yönetimi sağlayan bir mobil uygulama geliştirdim.',
+        'project3.tech': 'Teknolojiler: Swift, SwiftUI',
+        // Diller
+        'languages.content': 'İngilizce— C2',
+        // Gönüllü Çalışmalar
+        'voluntary.content': '2024 Güz Dönemi | İstanbul Beykent Üniversitesi AR-GE ve İnovasyon Kulübü, Sponsorluk Temsilciliği',
+        // Hobiler
+        'hobbies.content': 'Drone kullanmak, enstrüman çalmak, yabancı dil öğrenmek',
+        // İş Deneyimi
+        'employment.content': 'Tem 2025 — Eyl 2025 | Yazılım Mühendisi Stajyeri, TALPA, İstanbul',
+        'employment.detail1': 'OTP tabanlı ödeme doğrulama (Iyzico entegrasyonu) içeren yeni kurumsal web sitesinin tasarım ve geliştirme süreçlerinde aktif rol aldım.',
+        'employment.detail2': 'Mevcut web uygulamasının fonksiyonlarını geliştirmek üzere frontend ve backend geliştirme çalışmalarına katkı sağladım.',
+        'employment.detail3': 'İletişim süreçlerini hızlandırmak için Python ile otomatik e-posta gönderim uygulaması geliştirdim.',
+      }
+    };
+
+    function applyLang(lang){
+      const dict = I18N[lang] || I18N.en;
+      document.documentElement.setAttribute('data-lang', lang);
+
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if(dict[key]) el.textContent = dict[key];
+      });
+
+      // Word rotator: swap role words per language
+      const rotator = document.querySelectorAll('.word-rotator .word');
+      if(rotator && rotator.length >= 4){
+        if(lang === 'tr'){
+          rotator[0].textContent = 'Vibe Coder';
+          rotator[1].textContent = 'Backend Geliştirici';
+          rotator[2].textContent = 'Mobil Geliştirici';
+          rotator[3].textContent = 'Yazılım Mühendisi';
+        } else {
+          rotator[0].textContent = 'Vibe Coder';
+          rotator[1].textContent = 'Backend Developer';
+          rotator[2].textContent = 'Mobile Developer';
+          rotator[3].textContent = 'Software Engineer';
+        }
+      }
+
+      // Update language button active styling (optional via aria-pressed)
+      document.querySelectorAll('[data-set-lang]').forEach(btn => {
+        btn.setAttribute('aria-pressed', btn.getAttribute('data-set-lang') === lang ? 'true' : 'false');
+      });
+
+      localStorage.setItem('lang', lang);
+    }
+
+    // Apply on load
+    applyTheme(document.documentElement.getAttribute('data-theme') || 'navy');
+    applyLang(document.documentElement.getAttribute('data-lang') || 'en');
 
     // ===== Sticky nav shadow
     const nav = document.querySelector('.nav');
@@ -381,10 +581,33 @@
     document.querySelectorAll('[data-set-theme]').forEach(btn=>{
       btn.addEventListener('click', ()=>{
         const theme = btn.getAttribute('data-set-theme');
-        document.documentElement.setAttribute('data-theme', theme);
-        localStorage.setItem('theme', theme);
+        applyTheme(theme);
       });
     });
+
+    // ===== Language toggle (single flag button)
+    const langToggle = document.getElementById('lang-toggle');
+    function updateLangToggleButton(currentLang){
+      if(!langToggle) return;
+      const target = currentLang === 'tr' ? 'en' : 'tr';
+      // Sayfa İngilizce ise Türk bayrağı, Türkçe ise İngiliz bayrağı göster
+      langToggle.textContent = target === 'tr' ? '🇹🇷' : '🇬🇧';
+      langToggle.setAttribute('data-target-lang', target);
+      langToggle.setAttribute('aria-label', target === 'tr' ? 'Türkçe' : 'English');
+      langToggle.title = target === 'tr' ? 'Türkçe' : 'English';
+    }
+    if(langToggle){
+      langToggle.addEventListener('click', (e)=>{
+        e.preventDefault();
+        const current = document.documentElement.getAttribute('data-lang') || (localStorage.getItem('lang') || 'en');
+        const target = current === 'tr' ? 'en' : 'tr';
+        applyLang(target);
+        updateLangToggleButton(target);
+      });
+      // ilk yüklemede doğru bayrağı göster
+      const effectiveLang = document.documentElement.getAttribute('data-lang') || (localStorage.getItem('lang') || 'en');
+      updateLangToggleButton(effectiveLang);
+    }
 
     // ===== Respect reduced motion
     const media = matchMedia('(prefers-reduced-motion: reduce)');
@@ -394,6 +617,9 @@
       pointerAngle = 0;
       grad.style.opacity = '1';
     }
+
   </script>
 </body>
 </html>
+
+
